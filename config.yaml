@@ -1,0 +1,41 @@
+# ─── Camera ───────────────────────────────────────────────────────────────────
+camera:
+  index: 0          # /dev/video0 → 0, /dev/video1 → 1, …
+  width: 1280
+  height: 720
+
+# ─── Reading interval ─────────────────────────────────────────────────────────
+interval_seconds: 300   # How often to capture and publish (seconds)
+
+# ─── Region of Interest ───────────────────────────────────────────────────────
+# Pixel coordinates of the digit strip in the captured frame.
+# Run  python calibrate.py  to get an annotated image and find these values.
+roi:
+  x: 100
+  y: 200
+  width: 400
+  height: 80
+
+# ─── OCR settings ─────────────────────────────────────────────────────────────
+ocr:
+  scale_factor: 3          # Upscale the ROI before OCR (higher = better for small digits)
+  threshold_method: otsu   # "otsu" or "adaptive"
+
+# ─── Meter ────────────────────────────────────────────────────────────────────
+meter:
+  decimal_places: 3   # Digits after decimal point  e.g. 3 → raw "1234567" → 1234.567
+  unit: "m³"
+
+# ─── MQTT / Home Assistant ────────────────────────────────────────────────────
+mqtt:
+  host: "192.168.1.10"       # IP or hostname of your Mosquitto broker
+  port: 1883
+  username: ""               # Leave empty if no auth
+  password: ""
+  device_id: "water_meter_main"   # Must be unique per meter
+  discovery_prefix: "homeassistant"
+
+# ─── Debug ────────────────────────────────────────────────────────────────────
+debug:
+  save_images: false          # Set to true to save preprocessed frames
+  image_dir: "/tmp/water-pi"  # Directory where debug images are written

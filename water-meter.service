@@ -1,0 +1,51 @@
+[Unit]
+Description=Water Meter Reader — captures webcam, OCR digits, publishes to MQTT/Home Assistant
+Documentation=https://github.com/your-repo/water-pi
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+WorkingDirectory=/home/pi/water-pi
+
+# ── Edit these two paths before installing ────────────────────────────────────
+ExecStart=/usr/bin/python3 /home/pi/water-pi/water_meter_reader.py \
+    --config /home/pi/water-pi/config.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+
+Restart=on-failure
+RestartSec=10
+
+# Give the camera device time to appear after boot
+ExecStartPre=/bin/sleep 5
+
+# Write stdout/stderr to the systemd journal (view with: journalctl -u water-meter -f)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=water-meter
+
+# Hardening — restrict unnecessary privileges
+PrivateTmp=true
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+
+# ─── Installation ─────────────────────────────────────────────────────────────
+#
+# 1. Copy this file to /etc/systemd/system/:
+#        sudo cp water-meter.service /etc/systemd/system/
+#
+# 2. Reload systemd and enable + start the service:
+#        sudo systemctl daemon-reload
+#        sudo systemctl enable --now water-meter
+#
+# 3. Check status:
+#        sudo systemctl status water-meter
+#
+# 4. Watch live logs:
+#        journalctl -u water-meter -f
+#
+# 5. To temporarily test a single reading without the service loop:
+#        python3 /home/pi/water-pi/water_meter_reader.py --once
