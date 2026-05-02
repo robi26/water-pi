@@ -1,7 +1,8 @@
 # Install system dependency first:
 #   sudo apt-get install tesseract-ocr
 
-opencv-python>=4.8.0
+# Use opencv-python-headless on servers/Raspberry Pi OS Lite (no GUI/display needed)
+opencv-python-headless>=4.8.0
 pytesseract>=0.3.10
 paho-mqtt>=2.0.0
 PyYAML>=6.0.1
